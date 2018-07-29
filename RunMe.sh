@@ -17,6 +17,8 @@ basename=$(basename "$1")
 extension="${basename##*.}"
 filename="${basename%.*}"
 
+echo $1
+
 # Make extension all lower case
 extensionLowerCase="$(echo "$extension" | tr '[:upper:]' '[:lower:]')"
 
@@ -25,7 +27,7 @@ if [ "$extensionLowerCase" = "pdf" ]
 then
     # Run pdf2htmlEX
     echo "Converting PDF to HTML..."
-    docker run -ti --rm -v "${PWD}":/pdf bwits/pdf2htmlex pdf2htmlEX "$basename" "$filename".html
+    docker run -ti --rm -v "${PWD}":/pdf bwits/pdf2htmlex pdf2htmlEX "$1" "$filename".html
     basename="$filename".html
     flag=1
 fi
@@ -34,7 +36,7 @@ fi
 # Convert file via Pandoc
 # "+RTS -K102400000 -RTS" to not get a stack overflow
 echo "Converting to WikiText..."
-pandoc +RTS -K102400000 -RTS -t wikitext.lua "$basename" -o "$filename".tid
+pandoc +RTS -K102400000 -RTS -t wikitext.lua "$1" -o "$filename".tid
 
 
 # Remove .html file if we converted it from a PDF

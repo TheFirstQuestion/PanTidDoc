@@ -27,7 +27,7 @@ if __name__ == '__main__':
     # Put back line breaks
     noTags = re.sub(placeholder, "<br>", noTags)
     # Remove extraneous line breaks
-    noTags = re.sub(lotsOfBreaks, "<br>\n", noTags)
+    noTags = re.sub(lotsOfBreaks, "<br><br>\n\n", noTags)
     myFile.close()
     myFile = open(path, "w")
     # Add so TiddlyWiki will render as Tiddler, not text
