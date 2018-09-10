@@ -9,15 +9,21 @@ if [ -z "$1" ]; then
     usage
 fi
 
+echo
+echo
+
 # Remove temporary files?
 flag=0
+flag2=0
 
-# Get name and extension seperately
+# Get name and extension separately
+pathname=$(dirname "$1")
 basename=$(basename "$1")
 extension="${basename##*.}"
 filename="${basename%.*}"
 
 echo $1
+
 
 # Make extension all lower case
 extensionLowerCase="$(echo "$extension" | tr '[:upper:]' '[:lower:]')"
@@ -49,5 +55,17 @@ fi
 
 # Run tiddlyify to clean up the file and add type needed for proper import
 echo "Cleaning up WikiText..."
-./tiddlify.py "$filename".tid
+./tiddlify.py "$filename".tid "$1"
+
+# Move .tid file back to original location, if flag
+if [ "$flag2" = 1 ]
+then
+    echo "Moving Tiddler back to original location..."
+    mv "$filename".tid "$pathname"/"$filename".tid
+fi
+
+# Move tiddler into tiddler directory in NLFM
+mv "$filename".tid ../tiddlers/"$filename".tid
+
+# Done
 echo "Done!"
